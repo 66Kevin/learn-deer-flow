@@ -1,0 +1,18 @@
+{
+  "models": [
+    {
+      "name": "fake-default",
+      "display_name": "Fake Default",
+      "use": "deerflow.models.testing:FixedResponseChatModel",
+      "model": "fixed-response",
+      "response_text": "P01 says hello"
+    },
+    {
+      "name": "fake-alt",
+      "display_name": "Fake Alternate",
+      "use": "deerflow.models.testing:FixedResponseChatModel",
+      "model": "fixed-response",
+      "response_text": "P01 alternate response"
+    }
+  ]
+}
