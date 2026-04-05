@@ -1,7 +1,18 @@
-.venv/
+# OS generated files
+.DS_Store
+
+# Virtual environments
+.venv
+venv/
 **/.venv/
+
+# Python cache
 __pycache__/
 **/__pycache__/
 .pytest_cache/
 *.pyc
-.DS_Store
+*.pyo
+
+# IDE
+.idea/
+.vscode/
