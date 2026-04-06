@@ -1,0 +1,18 @@
+models:
+  - name: deepseek-v3
+    display_name: DeepSeek V3 (Thinking)
+    use: langchain_openai:ChatOpenAI
+    model: deepseek-reasoner
+    base_url: https://api.deepseek.com
+    api_key: $DEEPSEEK_API_KEY
+
+tool_groups:
+  - name: builtin
+  - name: web
+
+tools:
+  - name: search_stub
+    group: web
+    use: mini_deerflow.community.stub_search.tools:search_stub_tool
+    results:
+      - Mini DeerFlow P02 search result
