@@ -44,6 +44,10 @@ When updating `AGENTS.md`, keep it focused on stable, high-level guidance for AI
 
 `P01-the-loop` 的本地实现命名应使用 `mini-deerflow` / `mini_deerflow`，不要把学习版实现直接命名为 `deerflow`；只有在说明与上游 `DeerFlow 2.0` 的对应关系时，才保留对上游项目名的引用。
 
+阶段设计文档应放在 `docs/mini-deerflow/spec/`；阶段 implementation plan 应放在独立的 plan 目录中，除非用户另行指定。
+
+`config.yaml` 与 `config.example.yaml` 的新增或更新示例应使用真实 YAML 写法，不要在 `.yaml` 文件中继续新增 JSON-shaped 示例。
+
 ## Code Style Guidelines
 
 ### Linting and Formatting

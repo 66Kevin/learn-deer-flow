@@ -4,6 +4,12 @@
 
 目标不是一次性复刻全部细节，而是沿着 `P01 -> P11` 的顺序，把 `DeerFlow 2.0` 的核心分层逐步重建出来：`lead_agent`、tools、thread state、middleware、planning、skills、context compact、sandbox、subagents、runtime services、product shell。
 
+文档分工：
+
+- `docs/mini-deerflow/`: 阶段概览与学习型拆解文档
+- `docs/mini-deerflow/spec/`: 正式 phase spec 文档
+- `docs/mini-deerflow/plans/`: implementation plan 文档
+
 建议阅读顺序：
 
 - [P00 Roadmap](./P00-roadmap.md)
@@ -24,4 +30,4 @@
 - 中文为主，特有名词保留英文原词。
 - 以 `DeerFlow 2.0` 为主要参考，而不是 `1.x Deep Research workflow`。
 - 每个阶段都必须有清晰边界、可运行产物、可演示结果、可进入下一阶段的完成标准。
-
+- `config.yaml` / `config.example.yaml` 的示例优先使用真实 YAML 写法，不再新增 JSON-shaped YAML 示例。
