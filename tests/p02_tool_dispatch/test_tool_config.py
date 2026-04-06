@@ -6,8 +6,10 @@ from tests.p02_tool_dispatch.support import REPO_ROOT, ensure_p02_harness_on_pat
 
 ensure_p02_harness_on_path()
 
+from mini_deerflow.config import app_config as app_config_module  # type: ignore  # noqa: E402
 from mini_deerflow.config import load_app_config  # type: ignore  # noqa: E402
 from mini_deerflow.models.factory import create_chat_model  # type: ignore  # noqa: E402
+from mini_deerflow import reflection as reflection_module  # type: ignore  # noqa: E402
 
 
 class TestP02ToolConfig(unittest.TestCase):
@@ -30,6 +32,10 @@ class TestP02ToolConfig(unittest.TestCase):
     def test_load_app_config_rejects_tool_without_use(self) -> None:
         with self.assertRaisesRegex(ValueError, "Tool config must define `use`"):
             load_app_config(self.missing_use_path)
+
+    def test_p02_config_and_reflection_do_not_define_fallback_implementations(self) -> None:
+        self.assertFalse(hasattr(app_config_module, "_simple_yaml_load"))
+        self.assertFalse(hasattr(reflection_module, "FallbackChatModel"))
 
     def test_create_chat_model_uses_default_tool_model(self) -> None:
         model = create_chat_model(config_path=self.config_path)

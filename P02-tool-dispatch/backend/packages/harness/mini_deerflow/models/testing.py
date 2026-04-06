@@ -3,15 +3,7 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from typing import Any, Sequence
 
-try:
-    from langchain_core.messages import AIMessage
-except ModuleNotFoundError:  # pragma: no cover - exercised only in minimal local envs
-    @dataclass(slots=True)
-    class AIMessage:
-        """Fallback AI message for local tests without langchain-core."""
-
-        content: str
-        tool_calls: list[dict[str, Any]] = field(default_factory=list)
+from langchain_core.messages import AIMessage
 
 
 def _message_type(message: Any) -> str:
