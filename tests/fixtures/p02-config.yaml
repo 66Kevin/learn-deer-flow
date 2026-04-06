@@ -1,0 +1,16 @@
+models:
+  - name: fake-tool-model
+    display_name: Fake Tool Model
+    use: mini_deerflow.models.testing:ToolCallingChatModel
+    model: tool-calling
+
+tool_groups:
+  - name: builtin
+  - name: web
+
+tools:
+  - name: search_stub
+    group: web
+    use: mini_deerflow.community.stub_search.tools:search_stub_tool
+    results:
+      - Mini DeerFlow P02 search result
