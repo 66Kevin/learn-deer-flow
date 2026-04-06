@@ -11,6 +11,23 @@
 
 这一阶段不实现 tools、thread workspace、middleware、sandbox、memory、Gateway 或 Frontend。
 
+## What You Will Learn
+
+在这一阶段中，你可以重点学到下面这些内容：
+
+1. **如何使用 LangGraph 构建一个最小化的 agent**
+   这一章会带你看到，一个最小可运行的 agent 并不需要复杂的多节点编排。只要有一个清晰的 graph 入口、一个读取消息并调用模型的节点，以及一个稳定的状态结构，就已经可以形成最基础的 agent runtime。
+2. **如何使用 `langgraph.json` 和 `langgraph dev` 来启动 agent 服务**
+   你会理解 `langgraph.json` 在 LangGraph 项目中的角色：它负责声明 graph 的注册入口、依赖和环境变量来源；而 `langgraph dev` 则把这个 graph 作为本地服务跑起来，让你能够通过 HTTP 或 SDK 直接向 agent 发消息。
+3. **如何在 VS Code 中调试 LangGraph**
+   这一章不仅能让你把服务跑起来，还能看到如何把 `langgraph dev` 进程接入 VS Code 调试器。这样你就可以沿着 `config.yaml -> make_lead_agent() -> create_chat_model() -> model.invoke()` 这条链路逐步下断点，真正看清一次请求是怎样流过整个最小 runtime 的。
+4. **如何把 agent 入口和模型创建逻辑拆开**
+   `lead_agent` 本身只负责组装 graph 和组织消息流，而模型的读取、选择和实例化被放进单独的 model factory 中。这种拆分虽然看起来比全写在一个文件里多了一层，但能明显降低主 loop 被 provider 细节污染的风险。
+5. **为什么在 DeerFlow 中要使用反射式的动态模型创建机制**
+   这一章会展示为什么 `create_chat_model()` 不是直接在代码里写死 `ChatOpenAI(...)`，而是通过配置中的 `use` 字段配合动态反射来创建 LLM。这样做的核心价值是让 agent runtime 和具体 provider 解耦：切换 OpenAI-compatible provider、接入测试假模型、或者替换为后续自定义 patch 类时，都不需要改 `lead_agent` 本身。
+6. **这种配置驱动方式相比直接写死模型代码的取舍**
+   动态反射的好处是灵活、可扩展、便于测试，也更接近 DeerFlow 这类 harness 的设计思路；代价则是错误会更多地在运行时暴露，而不是在写代码时由 IDE 或类型系统提前发现。理解这组取舍，是这一章非常重要的学习点。
+
 ## Directory Layout
 
 ```text
@@ -82,6 +99,6 @@ cd P01-the-loop/backend
 uv run langgraph dev --no-browser --port 8000 --debug-port 5678 --wait-for-client
 ```
 
-执行一次 `uv sync` 后，`debugpy` 会随项目默认依赖一起安装，因此上面的调试命令可以直接使用。
+- **--wait-for-client** 会让服务先停住，等你 IDE 连上后再继续
 
-然后在 VS Code 的 Run and Debug 面板选择 `Attach to LangGraph` 并启动。连上后再运行 [`tests/p01_the_loop/test_all.py`](/Users/wangyueyi/VscodeProjects/learn-deer-flow/tests/p01_the_loop/test_all.py) 或发送 HTTP 请求，即可命中断点查看 `config.yaml -> make_lead_agent() -> create_chat_model()` 的调用链。
+然后在 VS Code 的 Run and Debug 面板选择 `Attach to LangGraph` 并启动。连上后再运行 [`tests/p01_the_loop/test_all.py`](/Users/wangyueyi/VscodeProjects/learn-deer-flow/tests/p01_the_loop/test_all.py) 或发送 HTTP 请求，即可命中断点查看 `config.yaml -> make_lead_agent() -> create_chat_model()` 的调用链
