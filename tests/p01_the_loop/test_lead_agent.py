@@ -3,6 +3,8 @@ from __future__ import annotations
 import unittest
 from pathlib import Path
 
+from langgraph.graph.state import CompiledStateGraph
+
 from tests.p01_the_loop.support import REPO_ROOT, ensure_p01_harness_on_path
 
 ensure_p01_harness_on_path()
@@ -19,9 +21,10 @@ class TestLeadAgent(unittest.TestCase):
             config={"configurable": {"config_path": str(self.config_path)}}
         )
 
+        self.assertIsInstance(agent, CompiledStateGraph)
         result = agent.invoke({"messages": [{"role": "user", "content": "hello"}]})
-        self.assertEqual(result["messages"][-1]["role"], "assistant")
-        self.assertEqual(result["messages"][-1]["content"], "P01 says hello")
+        self.assertEqual(result["messages"][-1].type, "ai")
+        self.assertEqual(result["messages"][-1].content, "P01 says hello")
 
     def test_make_lead_agent_uses_requested_model_name(self) -> None:
         agent = make_lead_agent(
@@ -34,9 +37,8 @@ class TestLeadAgent(unittest.TestCase):
         )
 
         result = agent.invoke({"messages": [{"role": "user", "content": "hello"}]})
-        self.assertEqual(result["messages"][-1]["content"], "P01 alternate response")
+        self.assertEqual(result["messages"][-1].content, "P01 alternate response")
 
 
 if __name__ == "__main__":
     unittest.main()
-

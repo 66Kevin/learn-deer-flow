@@ -17,14 +17,21 @@ This file provides guidance to AI agents when working with code in this reposito
 
 ### Documentation Update Policy
 
-**CRITICAL: Always update README.md and AGENTS.md after every code change**
+**CRITICAL: Always update the relevant section README and AGENTS.md after every code change**
 
 When making code changes, you MUST update the relevant documentation:
 
-- Update `README.md` for user-facing changes such as features, setup, and usage instructions
+- Update the nearest relevant section README for user-facing changes such as features, setup, and usage instructions
+  - For example, changes under `P01-the-loop/` should update `P01-the-loop/README.md`, not the repository root `README.md`, unless the root-level project overview also needs to change
 - Update `AGENTS.md` for development changes such as architecture, commands, workflows, and internal systems
 - Keep documentation synchronized with the codebase at all times
 - Ensure accuracy and timeliness of all documentation
+
+When updating `AGENTS.md`, keep it focused on stable, high-level guidance for AI coding agents:
+
+- Prefer repository-wide conventions, architectural boundaries, and long-lived workflows
+- Do not record one-off debugging notes, temporary fixes, exact local ports, or other overly detailed operational steps
+- Put stage-specific setup, debugging, and usage details in the nearest section README or docs, not in `AGENTS.md`
 
 ## Architecture
 
@@ -33,14 +40,7 @@ When making code changes, you MUST update the relevant documentation:
 - Dependency manager: `uv`
 - Python version: `python3.13`
 
-常用启动方式：
-
-```bash
-cd P01-the-loop/backend
-uv sync
-uv run langgraph dev
-```
-
+默认开发与调试工作流所需的依赖应包含在项目的默认依赖集合中，避免 README 中的标准命令依赖额外的手动安装步骤。
 
 ## Code Style Guidelines
 

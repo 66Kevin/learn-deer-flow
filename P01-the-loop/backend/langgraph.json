@@ -6,6 +6,7 @@
   ],
   "graphs": {
     "lead_agent": "deerflow.agents:make_lead_agent"
-  }
+  },
+  "env": ".env"
 }
 

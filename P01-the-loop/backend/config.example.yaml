@@ -1,12 +1,12 @@
 {
   "models": [
     {
-      "name": "default-openai",
-      "display_name": "Default OpenAI",
+      "name": "deepseek-v3",
+      "display_name": "DeepSeek V3 (Thinking)",
       "use": "langchain_openai:ChatOpenAI",
-      "model": "gpt-4.1-mini",
-      "api_key": "$OPENAI_API_KEY"
+      "model": "deepseek-reasoner",
+      "base_url": "https://api.deepseek.com",
+      "api_key": "$DEEPSEEK_API_KEY"
     }
   ]
 }
-

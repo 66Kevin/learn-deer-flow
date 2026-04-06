@@ -3,6 +3,8 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Any
 
+from langgraph.graph import END, START, MessagesState, StateGraph
+
 from deerflow.agents.lead_agent.prompt import get_system_prompt
 from deerflow.models.factory import create_chat_model
 
@@ -63,21 +65,19 @@ class SimpleLeadAgent:
         return _normalize_message(response)
 
 
-def _build_langchain_agent(model: Any, system_prompt: str) -> Any | None:
-    try:
-        from langchain.agents import create_agent
-    except ImportError:
-        return None
+def _build_graph_agent(model: Any, system_prompt: str) -> Any:
+    fallback_agent = SimpleLeadAgent(model=model, system_prompt=system_prompt)
 
-    if not hasattr(model, "bind_tools"):
-        return None
+    def respond(state: MessagesState) -> dict[str, list[dict[str, Any]]]:
+        messages = _normalize_messages(state.get("messages", []))
+        response = fallback_agent._invoke_model(messages)
+        return {"messages": [response]}
 
-    return create_agent(
-        model=model,
-        tools=None,
-        system_prompt=system_prompt,
-        name="lead_agent",
-    )
+    graph = StateGraph(MessagesState)
+    graph.add_node("respond", respond)
+    graph.add_edge(START, "respond")
+    graph.add_edge("respond", END)
+    return graph.compile()
 
 
 def make_lead_agent(config: dict[str, Any] | None = None) -> Any:
@@ -96,8 +96,4 @@ def make_lead_agent(config: dict[str, Any] | None = None) -> Any:
     model = create_chat_model(name=model_name, config_path=config_path)
     system_prompt = get_system_prompt()
 
-    return _build_langchain_agent(model, system_prompt) or SimpleLeadAgent(
-        model=model,
-        system_prompt=system_prompt,
-    )
-
+    return _build_graph_agent(model, system_prompt)

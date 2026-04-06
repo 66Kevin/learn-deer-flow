@@ -15,4 +15,12 @@ __pycache__/
 
 # IDE
 .idea/
-.vscode/
+
+# Environment variables
+.env
+
+# langgraph
+.langgraph_api
+
+# config
+config.yaml

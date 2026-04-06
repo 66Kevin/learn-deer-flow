@@ -40,3 +40,24 @@ DeerFlow的Harness设计
 DeerFlow的MultiAgent设计
 
 WIP……
+
+## P01 The Loop
+
+`P01-the-loop` 当前默认示例统一使用 DeepSeek。
+
+启动前请先准备环境变量和配置文件：
+
+```bash
+cd P01-the-loop/backend
+cp .env.example .env
+cp config.example.yaml config.yaml
+```
+
+然后在 `.env` 中填写 `DEEPSEEK_API_KEY`，再执行：
+
+```bash
+uv sync
+uv run langgraph dev
+```
+
+其中 `uv sync` 需要把 `langgraph dev` 对应的 CLI 一并安装到当前环境，否则会出现 `Failed to spawn: langgraph`。
