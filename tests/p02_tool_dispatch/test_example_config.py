@@ -24,7 +24,10 @@ class TestP02ExampleConfig(unittest.TestCase):
 
     def test_example_config_can_create_default_chat_model(self) -> None:
         model = create_chat_model(config_path=self.config_path)
-        self.assertIsNotNone(model)
+        self.assertEqual(type(model).__name__, "ChatOpenAI")
+        self.assertEqual(model.model_name, "deepseek-reasoner")
+        self.assertEqual(model.openai_api_base, "https://api.deepseek.com")
+        self.assertEqual(model.openai_api_key.get_secret_value(), "test-key")
 
 
 if __name__ == "__main__":
