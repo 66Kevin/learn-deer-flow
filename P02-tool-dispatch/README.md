@@ -12,7 +12,7 @@
 - `tool_groups`
 - `tools`
 - builtin tools live in code under `mini_deerflow.tools.builtins`
-- configured tools are loaded from `config.example.yaml`
+- configured tools are loaded from the active config path (`config.yaml` in normal use; `config.example.yaml` is the example starting point)
 - 最小的 `model -> tools -> model` loop
 
 ## What You Will Learn
