@@ -11,7 +11,8 @@
 - `get_available_tools()`
 - `tool_groups`
 - `tools`
-- builtin tools 与 configured tools
+- builtin tools live in code under `mini_deerflow.tools.builtins`
+- configured tools are loaded from `config.example.yaml`
 - 最小的 `model -> tools -> model` loop
 
 ## What You Will Learn
@@ -52,6 +53,8 @@ uv run langgraph dev
 
 `langgraph.json` 会把 `lead_agent` 指向 `mini_deerflow.agents:make_lead_agent`。`make_lead_agent()` 读取配置后，会用 `create_chat_model()` 创建模型，再通过 `get_available_tools()` 绑定 builtin tools 和 configured tools，组成最小 dispatch loop。
 
+The shipped `config.example.yaml` uses a DeepSeek-compatible model config, so set `DEEPSEEK_API_KEY` before sending real requests.
+
 ## Demo Tools
 
 P02 自带的演示工具包括：
@@ -75,7 +78,7 @@ P02 自带的演示工具包括：
 ## Verification
 
 ```bash
-uv run --with pytest pytest tests/p02_tool_dispatch -v
+PYTHONPATH=. uv run --project P02-tool-dispatch/backend --with pytest python -m pytest tests/p02_tool_dispatch -v
 python3 -m compileall P02-tool-dispatch/backend
 ```
 
