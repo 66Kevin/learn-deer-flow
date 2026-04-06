@@ -5,8 +5,8 @@ from typing import Any
 
 from langgraph.graph import END, START, MessagesState, StateGraph
 
-from deerflow.agents.lead_agent.prompt import get_system_prompt
-from deerflow.models.factory import create_chat_model
+from mini_deerflow.agents.lead_agent.prompt import get_system_prompt
+from mini_deerflow.models.factory import create_chat_model
 
 
 def _normalize_message(message: Any) -> dict[str, Any]:

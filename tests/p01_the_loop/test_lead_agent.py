@@ -9,7 +9,7 @@ from tests.p01_the_loop.support import REPO_ROOT, ensure_p01_harness_on_path
 
 ensure_p01_harness_on_path()
 
-from deerflow.agents import make_lead_agent  # type: ignore  # noqa: E402
+from mini_deerflow.agents import make_lead_agent  # type: ignore  # noqa: E402
 
 
 class TestLeadAgent(unittest.TestCase):

@@ -6,7 +6,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
-from deerflow.config.model_config import ModelConfig
+from mini_deerflow.config.model_config import ModelConfig
 
 
 def _backend_root() -> Path:
@@ -65,4 +65,3 @@ def load_app_config(path: str | os.PathLike[str] | None = None) -> AppConfig:
     config_path = Path(path) if path is not None else get_default_config_path()
     payload = _load_config_payload(config_path)
     return AppConfig.from_dict(payload, source_path=config_path)
-

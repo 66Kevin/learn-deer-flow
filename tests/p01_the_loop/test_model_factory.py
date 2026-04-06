@@ -7,8 +7,8 @@ from tests.p01_the_loop.support import REPO_ROOT, ensure_p01_harness_on_path
 
 ensure_p01_harness_on_path()
 
-from deerflow.config import load_app_config  # type: ignore  # noqa: E402
-from deerflow.models.factory import create_chat_model  # type: ignore  # noqa: E402
+from mini_deerflow.config import load_app_config  # type: ignore  # noqa: E402
+from mini_deerflow.models.factory import create_chat_model  # type: ignore  # noqa: E402
 
 
 class TestModelFactory(unittest.TestCase):
@@ -30,4 +30,3 @@ class TestModelFactory(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
-

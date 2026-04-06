@@ -7,7 +7,7 @@ from tests.p01_the_loop.support import P01_BACKEND_ROOT, ensure_p01_harness_on_p
 
 ensure_p01_harness_on_path()
 
-from deerflow.models.factory import create_chat_model  # type: ignore  # noqa: E402
+from mini_deerflow.models.factory import create_chat_model  # type: ignore  # noqa: E402
 
 
 class TestP01ExampleConfig(unittest.TestCase):

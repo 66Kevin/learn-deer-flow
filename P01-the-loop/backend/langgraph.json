@@ -5,8 +5,7 @@
     "."
   ],
   "graphs": {
-    "lead_agent": "deerflow.agents:make_lead_agent"
+    "lead_agent": "mini_deerflow.agents:make_lead_agent"
   },
   "env": ".env"
 }
-

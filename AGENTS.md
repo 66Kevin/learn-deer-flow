@@ -42,6 +42,8 @@ When updating `AGENTS.md`, keep it focused on stable, high-level guidance for AI
 
 默认开发与调试工作流所需的依赖应包含在项目的默认依赖集合中，避免 README 中的标准命令依赖额外的手动安装步骤。
 
+`P01-the-loop` 的本地实现命名应使用 `mini-deerflow` / `mini_deerflow`，不要把学习版实现直接命名为 `deerflow`；只有在说明与上游 `DeerFlow 2.0` 的对应关系时，才保留对上游项目名的引用。
+
 ## Code Style Guidelines
 
 ### Linting and Formatting

@@ -11,8 +11,8 @@ class TestP01Readme(unittest.TestCase):
         readme = (P01_ROOT / "README.md").read_text(encoding="utf-8")
         self.assertIn("langgraph dev", readme)
         self.assertIn("make_lead_agent", readme)
+        self.assertIn("mini-deerflow", readme)
 
 
 if __name__ == "__main__":
     unittest.main()
-

@@ -4,8 +4,8 @@ import os
 from pathlib import Path
 from typing import Any
 
-from deerflow.config import load_app_config
-from deerflow.reflection import resolve_object
+from mini_deerflow.config import load_app_config
+from mini_deerflow.reflection import resolve_object
 
 
 def _resolve_env_placeholders(value: Any) -> Any:
@@ -41,4 +41,3 @@ def create_chat_model(
     init_kwargs = _resolve_env_placeholders(selected.build_init_kwargs())
     init_kwargs.update(overrides)
     return model_class(**init_kwargs)
-

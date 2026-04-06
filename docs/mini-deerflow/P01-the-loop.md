@@ -17,7 +17,7 @@
 - `create_chat_model()`
 - 一个最小 system prompt
 
-可以把它理解为 DeerFlow 2.0 的“裸 harness”。
+可以把它理解为 `mini-deerflow` 在 P01 阶段的“裸 harness”。
 
 ## 推荐实现目标
 
@@ -29,10 +29,10 @@
 ## 推荐落地文件
 
 - `backend/langgraph.json`
-- `backend/packages/harness/deerflow/agents/lead_agent/agent.py`
-- `backend/packages/harness/deerflow/models/factory.py`
-- `backend/packages/harness/deerflow/agents/lead_agent/prompt.py`
-- `backend/packages/harness/deerflow/config/model_config.py`
+- `backend/packages/harness/mini_deerflow/agents/lead_agent/agent.py`
+- `backend/packages/harness/mini_deerflow/models/factory.py`
+- `backend/packages/harness/mini_deerflow/agents/lead_agent/prompt.py`
+- `backend/packages/harness/mini_deerflow/config/model_config.py`
 
 ## 明确不做
 
@@ -58,8 +58,8 @@
 ## 对应 DeerFlow 2.0 模块
 
 - `backend/langgraph.json`
-- `backend/packages/harness/deerflow/agents/lead_agent/agent.py`
-- `backend/packages/harness/deerflow/models/factory.py`
+- `backend/packages/harness/mini_deerflow/agents/lead_agent/agent.py`
+- `backend/packages/harness/mini_deerflow/models/factory.py`
 
 ## 推荐公开 demo
 
@@ -72,4 +72,3 @@
 - 你已经接受“loop 应该尽量小”这个前提
 - model factory 和 agent factory 已经分离
 - 这个最小版本即使功能弱，也已经是一个真实的 agent runtime
-
