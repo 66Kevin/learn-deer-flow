@@ -20,16 +20,22 @@ def _resolve_env_placeholders(value: Any) -> Any:
 
 
 def _create_configured_tool(tool_config: ToolConfig) -> Any:
-    provider = resolve_object(tool_config.use)
+    try:
+        provider = resolve_object(tool_config.use)
+    except Exception as exc:
+        raise ValueError(f"Failed to load configured tool `{tool_config.name}` from `{tool_config.use}`.") from exc
     if hasattr(provider, "name") and hasattr(provider, "invoke"):
         return provider
     if not callable(provider):
-        raise TypeError(f"Configured tool provider must be callable or a tool object: {tool_config.use}")
+        raise TypeError(f"Configured tool provider for `{tool_config.name}` must be callable or a tool object: {tool_config.use}")
 
     init_kwargs = _resolve_env_placeholders(tool_config.settings)
-    tool = provider(name=tool_config.name, **init_kwargs)
+    try:
+        tool = provider(name=tool_config.name, **init_kwargs)
+    except Exception as exc:
+        raise ValueError(f"Failed to initialize configured tool `{tool_config.name}` from `{tool_config.use}`.") from exc
     if not hasattr(tool, "name"):
-        raise TypeError(f"Configured tool provider did not return a tool-like object: {tool_config.use}")
+        raise TypeError(f"Configured tool provider for `{tool_config.name}` did not return a tool-like object: {tool_config.use}")
     return tool
 
 

@@ -46,6 +46,8 @@ When updating `AGENTS.md`, keep it focused on stable, high-level guidance for AI
 
 `P02-tool-dispatch` 的后端基础层延续同样的命名约定，并优先把配置、模型工厂、反射加载这类系统边界放在 `backend/packages/harness/mini_deerflow/` 下的独立模块中，而不是直接塞回 agent 入口。
 
+`P02-tool-dispatch` 中的工具注册表、builtin tools 与 community tool providers 应保留在 `backend/packages/harness/mini_deerflow/tools/` 与 `backend/packages/harness/mini_deerflow/community/` 这些独立边界内，而不是散落到 lead agent 或 graph 入口文件里。
+
 阶段设计文档应放在 `docs/mini-deerflow/spec/`；阶段 implementation plan 应放在独立的 plan 目录中，除非用户另行指定。
 
 `config.yaml` 与 `config.example.yaml` 的新增或更新示例应使用真实 YAML 写法，不要在 `.yaml` 文件中继续新增 JSON-shaped 示例。
