@@ -8,7 +8,7 @@ from langchain_core.tools import StructuredTool
 def search_stub_tool(name: str = "search_stub", results: Sequence[str] | None = None) -> StructuredTool:
     """Create a deterministic configured search stub tool."""
 
-    resolved_results = list(results or ["Mini DeerFlow P02 search result"])
+    resolved_results = ["Mini DeerFlow P02 search result"] if results is None else list(results)
 
     def _search_stub(query: str) -> str:
         joined_results = " | ".join(resolved_results)

@@ -9,6 +9,10 @@ from mini_deerflow.reflection import resolve_object
 from mini_deerflow.tools.builtins import get_builtin_tools
 
 
+def _is_tool_invokable(value: Any) -> bool:
+    return hasattr(value, "name") and hasattr(value, "invoke")
+
+
 def _resolve_env_placeholders(value: Any) -> Any:
     if isinstance(value, str) and value.startswith("$") and len(value) > 1:
         return os.getenv(value[1:], value)
@@ -24,7 +28,7 @@ def _create_configured_tool(tool_config: ToolConfig) -> Any:
         provider = resolve_object(tool_config.use)
     except Exception as exc:
         raise ValueError(f"Failed to load configured tool `{tool_config.name}` from `{tool_config.use}`.") from exc
-    if hasattr(provider, "name") and hasattr(provider, "invoke"):
+    if _is_tool_invokable(provider):
         return provider
     if not callable(provider):
         raise TypeError(f"Configured tool provider for `{tool_config.name}` must be callable or a tool object: {tool_config.use}")
@@ -34,9 +38,18 @@ def _create_configured_tool(tool_config: ToolConfig) -> Any:
         tool = provider(name=tool_config.name, **init_kwargs)
     except Exception as exc:
         raise ValueError(f"Failed to initialize configured tool `{tool_config.name}` from `{tool_config.use}`.") from exc
-    if not hasattr(tool, "name"):
-        raise TypeError(f"Configured tool provider for `{tool_config.name}` did not return a tool-like object: {tool_config.use}")
+    if not _is_tool_invokable(tool):
+        raise ValueError(f"Configured tool provider for `{tool_config.name}` did not return a tool-invokable object: {tool_config.use}")
     return tool
+
+
+def _append_tool(tools: list[Any], tool: Any) -> None:
+    tool_name = getattr(tool, "name", None)
+    if not isinstance(tool_name, str) or not tool_name:
+        raise ValueError("Registry received a tool without a valid name.")
+    if any(existing.name == tool_name for existing in tools):
+        raise ValueError(f"Duplicate tool name is not allowed: {tool_name}")
+    tools.append(tool)
 
 
 def get_available_tools(
@@ -52,10 +65,10 @@ def get_available_tools(
     tools: list[Any] = []
     for group_name, tool in get_builtin_tools():
         if group_name in active_groups:
-            tools.append(tool)
+            _append_tool(tools, tool)
 
     for tool_config in app_config.tools:
         if tool_config.group in active_groups:
-            tools.append(_create_configured_tool(tool_config))
+            _append_tool(tools, _create_configured_tool(tool_config))
 
     return tools
