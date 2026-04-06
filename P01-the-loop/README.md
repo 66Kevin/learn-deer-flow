@@ -53,17 +53,54 @@ P01-the-loop/
 4. 安装依赖
 5. 启动 `langgraph dev`
 
-```bash
 cd P01-the-loop/backend
 cp .env.example .env
 cp config.example.yaml config.yaml
 uv sync
 uv run langgraph dev
-```
-
 这里的 `uv sync` 会把 `langgraph` Python 包和 `langgraph dev` 所需的 `langgraph` CLI 一起装进当前环境。
 
 `langgraph.json` 会把 `lead_agent` 指向 `deerflow.agents:make_lead_agent`，并默认从 `.env` 加载环境变量。当前 `make_lead_agent()` 会直接构造一个最小 `StateGraph` 并返回 `CompiledStateGraph`，这样可以被 `langgraph dev` 直接注册和运行。
+
+## Send a Test Message
+
+当 `uv run langgraph dev` 成功启动后，可以打开另一个终端，使用下面两种方式向 `lead_agent` 发送消息做联调。
+
+### Option 1: Use `curl`
+
+```bash
+curl -N \
+  -X POST http://localhost:8000/runs/stream \
+  -H "Content-Type: application/json" \
+  -d '{
+    "assistant_id": "lead_agent",
+    "input": {
+      "messages": [
+        {
+          "role": "human",
+          "content": "你好，请做个自我介绍"
+        }
+      ]
+    },
+    "stream_mode": "values"
+  }'
+```
+这个请求会直接调用 LangGraph 本地服务的 `/runs/stream` 接口。返回内容是流式事件，最后一个 `values` 事件中会包含完整的 `messages` 列表和 assistant 的回复。
+
+### Option 2: Run `test_all.py`
+
+也可以直接运行仓库里的联调脚本：
+
+```bash
+P01-the-loop/backend/.venv/bin/python tests/p01_the_loop/test_all.py
+```
+这个脚本默认连接 `http://localhost:8000`，会：
+
+- 流式打印每个 LangGraph 事件
+- 在结束时额外打印 `All LLM replies:`
+- 输出本次 run 中收集到的所有 LLM 回复文本
+
+如果你把 `langgraph dev` 启动在别的端口上，需要同步修改 [`tests/p01_the_loop/test_all.py`](/Users/wangyueyi/VscodeProjects/learn-deer-flow/tests/p01_the_loop/test_all.py) 里的 `url`。
 
 ## Config
 
@@ -83,7 +120,6 @@ uv run langgraph dev
   ]
 }
 ```
-
 示例中的 `api_key` 会通过环境变量占位符解析，所以需要先在 `.env` 中提供 `DEEPSEEK_API_KEY`。这里默认用 `langchain_openai:ChatOpenAI` 直连 DeepSeek 的 OpenAI-compatible API，并通过 `base_url` 指向 `https://api.deepseek.com`。
 
 为了让本阶段测试不依赖真实外部 API，测试用例使用了本地 `FixedResponseChatModel`。
@@ -98,7 +134,6 @@ uv run langgraph dev
 cd P01-the-loop/backend
 uv run langgraph dev --no-browser --port 8000 --debug-port 5678 --wait-for-client
 ```
-
 - **--wait-for-client** 会让服务先停住，等你 IDE 连上后再继续
 
 然后在 VS Code 的 Run and Debug 面板选择 `Attach to LangGraph` 并启动。连上后再运行 [`tests/p01_the_loop/test_all.py`](/Users/wangyueyi/VscodeProjects/learn-deer-flow/tests/p01_the_loop/test_all.py) 或发送 HTTP 请求，即可命中断点查看 `config.yaml -> make_lead_agent() -> create_chat_model()` 的调用链
