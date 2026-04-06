@@ -119,6 +119,27 @@ tools:
         self.assertEqual([message.name for message in tool_messages], ["search_stub"])
         self.assertNotIn("current_time=", result["messages"][-1].content)
 
+    def test_make_lead_agent_copies_default_runtime_options(self) -> None:
+        runtime_config = {
+            "configurable": {
+                "config_path": str(self.config_path),
+                "tool_groups": ["web"],
+            }
+        }
+        agent = make_lead_agent(config=runtime_config)
+
+        runtime_config["configurable"]["tool_groups"] = ["builtin"]
+
+        result = agent.invoke({"messages": [{"role": "user", "content": "search P02"}]})
+        tool_messages = [
+            message
+            for message in result["messages"]
+            if getattr(message, "type", "") == "tool"
+        ]
+
+        self.assertEqual([message.name for message in tool_messages], ["search_stub"])
+        self.assertNotIn("current_time=", result["messages"][-1].content)
+
     def test_make_lead_agent_uses_runtime_config_path_and_model_name(self) -> None:
         with tempfile.TemporaryDirectory() as temp_dir:
             temp_path = Path(temp_dir)

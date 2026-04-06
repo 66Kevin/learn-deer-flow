@@ -12,6 +12,16 @@ from mini_deerflow.models.factory import create_chat_model
 from mini_deerflow.tools import get_available_tools
 
 
+def _copy_runtime_option_value(value: Any) -> Any:
+    if isinstance(value, dict):
+        return {key: _copy_runtime_option_value(item) for key, item in value.items()}
+    if isinstance(value, list):
+        return [_copy_runtime_option_value(item) for item in value]
+    if isinstance(value, tuple):
+        return tuple(_copy_runtime_option_value(item) for item in value)
+    return value
+
+
 def _extract_runtime_options(config: Any) -> dict[str, Any]:
     if not isinstance(config, dict):
         return {}
@@ -20,7 +30,9 @@ def _extract_runtime_options(config: Any) -> dict[str, Any]:
     if not isinstance(configurable, dict):
         return {}
 
-    return configurable
+    return {
+        key: _copy_runtime_option_value(value) for key, value in configurable.items()
+    }
 
 
 def _select_next_node(state: MessagesState) -> str:
